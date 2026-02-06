@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>For You Cutie 🌹</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body { font-family: 'Quicksand', sans-serif; }
+.cursive { font-family: 'Great Vibes', cursive; }
+
+@keyframes zoomSlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes fall {
+  from { transform: translateY(-100px); opacity: 0; }
+  to { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-heartbeat { animation: heartbeat 1.5s infinite; }
+.animate-fadeIn { animation: fadeIn 1s ease-out; }
+.animate-fall { animation: fall 14s linear infinite; }
+
+.vignette {
+  background: radial-gradient(circle at center,
+    rgba(0,0,0,0.1) 0%,
+    rgba(0,0,0,0.35) 60%,
+    rgba(0,0,0,0.55) 100%);
+}
+</style>
+</head>
+
+<body class="min-h-screen overflow-hidden text-white">
+
+<!-- 🎵 MUSIC -->
+<audio id="music" loop preload="auto">
+  <source src="Tum Ho Toh Song Ringtone Download - MobCup.Com.Co.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn"
+ class="fixed bottom-6 right-6 z-50 bg-rose-500/90 px-4 py-3 rounded-full shadow-xl">
+🎵
+</button>
+
+<!-- 🌄 BACKGROUND -->
+<div class="fixed inset-0 overflow-hidden">
+  <div class="absolute inset-0 bg-cover bg-center"
+       style="background-image:url('cutie.jpeg');
+              animation: zoomSlow 30s linear infinite;">
+  </div>
+
+  <div class="absolute inset-0 bg-black/20"></div>
+  <div class="absolute inset-0 vignette"></div>
+  <div id="petals" class="absolute inset-0"></div>
+</div>
+
+<!-- CONTENT -->
+<div class="relative z-10 min-h-screen flex items-center justify-center px-4">
+
+<!-- INTRO -->
+<div id="intro" class="text-center transition-all duration-700">
+  <p class="text-2xl text-rose-200 mb-6">Hey… this is for you Cutie 🌸</p>
+
+  <div id="openBtn" class="text-9xl cursor-pointer animate-heartbeat select-none">
+    🌹
+  </div>
+
+  <p class="mt-4 text-rose-300 text-sm">touch the rose</p>
+</div>
+
+<!-- CARD -->
+<div id="card" class="hidden max-w-lg w-full animate-fadeIn">
+
+<div class="flex justify-center gap-6 mb-6 text-3xl">
+  🕯️ 🕯️ 🕯️
+</div>
+
+<div class="bg-white/15 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-2xl">
+
+<h1 class="cursive text-6xl text-rose-300 text-center mb-4">
+Happy Rose Day Cutie 🩷
+</h1>
+
+<p id="typedName" class="text-center text-2xl font-semibold text-rose-200 mb-4"></p>
+
+<p class="text-center text-rose-100 mb-6 leading-relaxed">
+I don’t know how many roses you’ll see today…<br>
+but I wanted this one to be different.<br>
+Just something made quietly, thinking about you 🌹
+</p>
+
+<div class="text-center">
+<button id="nextBtn"
+ class="bg-rose-500 hover:bg-rose-600 px-6 py-2 rounded-full shadow-lg">
+💌 tap to read more
+</button>
+
+<p id="secret1" class="hidden mt-4 text-rose-200 italic">
+You have this way of making moments feel lighter…
+</p>
+<p id="secret2" class="hidden mt-4 text-rose-200 italic">
+And honestly, that’s something really rare.
+</p>
+<p id="secret3" class="hidden mt-4 text-rose-300 font-semibold">
+No pressure. No expectations. You matter.
+</p>
+</div>
+
+<p class="cursive text-center text-3xl text-rose-300 mt-8">With love</p>
+<p class="text-center text-sm opacity-70 mt-2">February 7 • Rose Day 🌹</p>
+
+</div>
+</div>
+</div>
+
+<script>
+const openBtn = document.getElementById('openBtn');
+const intro = document.getElementById('intro');
+const card = document.getElementById('card');
+const music = document.getElementById('music');
+const musicBtn = document.getElementById('musicBtn');
+
+let musicStarted = false;
+
+// 🌸 petals
+const petals = document.getElementById('petals');
+for(let i=0;i<18;i++){
+  const p = document.createElement('div');
+  p.className = 'absolute animate-fall';
+  p.innerHTML = '🌸';
+  p.style.left = Math.random()*100 + '%';
+  p.style.fontSize = 14 + Math.random()*20 + 'px';
+  p.style.animationDelay = Math.random()*10 + 's';
+  petals.appendChild(p);
+}
+
+// 🎵 start music on FIRST interaction anywhere
+function startMusicOnce() {
+  if (!musicStarted) {
+    music.volume = 0.6;
+    music.play().catch(()=>{});
+    musicStarted = true;
+  }
+}
+document.addEventListener('click', startMusicOnce, { once: true });
+document.addEventListener('touchstart', startMusicOnce, { once: true });
+
+// 🌹 open card
+openBtn.onclick = () => {
+  intro.classList.add('opacity-0');
+  setTimeout(() => {
+    intro.classList.add('hidden');
+    card.classList.remove('hidden');
+    typeName();
+  }, 600);
+};
+
+// 🎵 music toggle
+musicBtn.onclick = () => {
+  music.paused ? music.play() : music.pause();
+};
+
+// typing
+const nameText = "Dear You 💖";
+let i = 0;
+function typeName() {
+  if (i < nameText.length) {
+    typedName.textContent += nameText[i++];
+    setTimeout(typeName, 90);
+  }
+}
+
+// secrets
+let step = 0;
+nextBtn.onclick = () => {
+  step++;
+  if(step === 1) secret1.classList.remove('hidden');
+  if(step === 2) secret2.classList.remove('hidden');
+  if(step === 3) {
+    secret3.classList.remove('hidden');
+    nextBtn.classList.add('hidden');
+  }
+};
+</script>
+
+</body>
+</html>
